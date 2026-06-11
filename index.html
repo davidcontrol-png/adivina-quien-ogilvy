@@ -3,198 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Adivina Qui\u00e9n \u2014 Ogilvy</title>
+<title>Adivina Quien - Ogilvy</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --rojo: #e8112d; --negro: #0a0a0a; --gris: #1a1a1a;
-    --blanco: #ffffff; --oro: #f5c518; --texto-suave: #aaaaaa;
+    --blanco: #ffffff; --oro: #f5c518; --suave: #aaaaaa;
   }
-  body { background: var(--negro); color: var(--blanco); font-family: 'Barlow Condensed','Arial Narrow',Arial,sans-serif; min-height:100vh; overflow-x:hidden; }
+  body { background: var(--negro); color: var(--blanco); font-family: Arial, sans-serif; min-height: 100vh; }
 
-  #pantalla-inicio { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:24px; gap:20px; }
-  .logo-ogilvy { font-size:2.8rem; font-weight:900; letter-spacing:2px; color:var(--blanco); text-transform:uppercase; }
-  .logo-ogilvy span { color:var(--rojo); }
-  .titulo-juego { font-size:1.6rem; font-weight:700; color:var(--texto-suave); text-transform:uppercase; letter-spacing:3px; text-align:center; }
-  .separador { width:60px; height:3px; background:var(--rojo); border-radius:2px; }
-  .btn { width:100%; max-width:340px; padding:16px 24px; border:none; border-radius:8px; font-size:1.1rem; font-weight:700; cursor:pointer; transition:all 0.15s; text-transform:uppercase; letter-spacing:1px; }
-  .btn-primario { background:var(--rojo); color:var(--blanco); }
-  .btn-primario:active { background:#c00d24; transform:scale(0.98); }
-  .btn-primario:disabled { background:#555; cursor:not-allowed; }
-  .btn-secundario { background:transparent; color:var(--blanco); border:2px solid #333; margin-top:-8px; }
-  .btn-secundario:active { background:#1a1a1a; transform:scale(0.98); }
-  .input-sala { width:100%; max-width:340px; padding:16px; background:var(--gris); border:2px solid #333; border-radius:8px; color:var(--blanco); font-size:1.5rem; font-weight:700; text-align:center; text-transform:uppercase; letter-spacing:6px; outline:none; }
-  .input-sala:focus { border-color:var(--rojo); }
-  .input-sala::placeholder { color:#555; letter-spacing:2px; font-size:1rem; }
-  .codigo-sala { background:var(--gris); border:2px solid var(--rojo); border-radius:12px; padding:20px 32px; text-align:center; max-width:340px; width:100%; }
-  .codigo-sala .label { font-size:0.8rem; color:var(--texto-suave); letter-spacing:2px; text-transform:uppercase; }
-  .codigo-sala .codigo { font-size:3.5rem; font-weight:900; color:var(--oro); letter-spacing:10px; }
-  .esperando { display:flex; align-items:center; gap:10px; color:var(--texto-suave); font-size:0.9rem; }
-  .dot-pulse { width:8px; height:8px; border-radius:50%; background:var(--rojo); animation:pulse 1.2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+  /* INICIO */
+  #pantalla-inicio { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; gap: 20px; }
+  .logo { font-size: 2.8rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+  .logo span { color: var(--rojo); }
+  .subtitulo { font-size: 1.4rem; color: var(--suave); text-transform: uppercase; letter-spacing: 3px; text-align: center; }
+  .linea { width: 60px; height: 3px; background: var(--rojo); border-radius: 2px; }
+  .btn { width: 100%; max-width: 340px; padding: 16px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+  .btn-rojo { background: var(--rojo); color: white; }
+  .btn-rojo:disabled { background: #555; cursor: not-allowed; }
+  .btn-gris { background: transparent; color: white; border: 2px solid #444; }
+  .btn-oro { background: var(--oro); color: #000; }
+  .input-codigo { width: 100%; max-width: 340px; padding: 16px; background: var(--gris); border: 2px solid #444; border-radius: 8px; color: white; font-size: 1.8rem; font-weight: 700; text-align: center; text-transform: uppercase; letter-spacing: 8px; outline: none; }
+  .input-codigo:focus { border-color: var(--rojo); }
+  .caja-codigo { background: var(--gris); border: 2px solid var(--rojo); border-radius: 12px; padding: 20px 32px; text-align: center; max-width: 340px; width: 100%; }
+  .caja-codigo .etiqueta { font-size: 0.75rem; color: var(--suave); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .caja-codigo .codigo { font-size: 3.5rem; font-weight: 900; color: var(--oro); letter-spacing: 10px; }
+  .esperando { display: flex; align-items: center; gap: 10px; color: var(--suave); font-size: 0.9rem; }
+  .punto { width: 8px; height: 8px; border-radius: 50%; background: var(--rojo); animation: parpadeo 1.2s infinite; }
+  @keyframes parpadeo { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .error { color: var(--rojo); font-size: 0.85rem; text-align: center; }
 
-  #pantalla-seleccion { display:none; flex-direction:column; min-height:100vh; }
-  .header-juego { background:var(--gris); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid var(--rojo); position:sticky; top:0; z-index:10; }
-  .header-titulo { font-size:1rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; }
-  .header-info { font-size:0.8rem; color:var(--texto-suave); }
-  .instruccion { background:var(--rojo); padding:12px 16px; font-size:0.95rem; font-weight:600; text-align:center; }
-  .grid-seleccion { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:12px; flex:1; }
-  .carta-seleccion { background:var(--gris); border-radius:8px; overflow:hidden; border:2px solid transparent; cursor:pointer; transition:all 0.15s; position:relative; }
-  .carta-seleccion:active { transform:scale(0.96); }
-  .carta-seleccion.seleccionada { border-color:var(--rojo); }
-  .carta-seleccion.seleccionada::after { content:'\u2713'; position:absolute; top:4px; right:4px; background:var(--rojo); color:white; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:900; }
-  .carta-seleccion img { width:100%; aspect-ratio:1; object-fit:cover; display:block; }
-  .footer-seleccion { padding:12px 16px; background:var(--gris); border-top:2px solid #333; position:sticky; bottom:0; }
-  .esperando-confirm { text-align:center; color:var(--texto-suave); font-size:0.9rem; padding:8px 0; }
+  /* SELECCION */
+  #pantalla-seleccion { display: none; flex-direction: column; min-height: 100vh; }
+  .cabecera { background: var(--gris); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--rojo); position: sticky; top: 0; z-index: 10; }
+  .cabecera-titulo { font-size: 1rem; font-weight: 700; text-transform: uppercase; }
+  .cabecera-info { font-size: 0.8rem; color: var(--suave); }
+  .aviso { background: var(--rojo); padding: 12px 16px; font-size: 0.95rem; font-weight: 600; text-align: center; }
+  .grid-sel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px; flex: 1; }
+  .carta-sel { background: var(--gris); border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; position: relative; }
+  .carta-sel img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+  .carta-sel.activa { border-color: var(--rojo); }
+  .carta-sel.activa::after { content: ''; position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; background: var(--rojo) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E") center/14px no-repeat; border-radius: 50%; }
+  .pie-sel { padding: 12px 16px; background: var(--gris); border-top: 2px solid #333; position: sticky; bottom: 0; }
+  .texto-espera { text-align: center; color: var(--suave); font-size: 0.9rem; padding: 10px 0; }
 
-  #pantalla-juego { display:none; flex-direction:column; min-height:100vh; }
-  .banner-turno { padding:10px 16px; text-align:center; font-weight:700; font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; transition:background 0.3s; }
-  .banner-turno.mi-turno { background:var(--rojo); }
-  .banner-turno.su-turno { background:#2a2a2a; color:var(--texto-suave); }
-  .mi-personaje { background:var(--gris); padding:10px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #222; }
-  .mi-personaje img { width:48px; height:48px; border-radius:6px; object-fit:cover; border:2px solid var(--rojo); }
-  .mi-personaje .info { flex:1; }
-  .mi-personaje .label-mi { font-size:0.65rem; color:var(--texto-suave); text-transform:uppercase; letter-spacing:1px; }
-  .mi-personaje .nombre-mi { font-size:0.95rem; font-weight:700; text-transform:uppercase; }
-  .grid-juego { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; padding:8px; flex:1; }
-  .carta-juego { background:var(--gris); border-radius:6px; overflow:hidden; cursor:pointer; transition:all 0.15s; position:relative; border:1px solid #222; }
-  .carta-juego:active { transform:scale(0.94); }
-  .carta-juego img { width:100%; aspect-ratio:1; object-fit:cover; display:block; transition:filter 0.2s; }
-  .carta-juego.eliminada img { filter:grayscale(1) brightness(0.2); }
-  .carta-juego.eliminada::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.6); }
-  .footer-juego { padding:10px 16px; background:var(--gris); border-top:2px solid #333; display:flex; gap:10px; position:sticky; bottom:0; }
-  .footer-juego .btn { flex:1; padding:12px; font-size:0.9rem; }
-  .btn-adivinar { background:var(--oro); color:var(--negro); }
-  .btn-adivinar:active { background:#d4aa14; }
-  .btn-pasar { background:#2a2a2a; color:var(--texto-suave); border:1px solid #333; }
+  /* JUEGO */
+  #pantalla-juego { display: none; flex-direction: column; min-height: 100vh; }
+  .turno-banner { padding: 10px 16px; text-align: center; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+  .turno-banner.yo { background: var(--rojo); }
+  .turno-banner.otro { background: #2a2a2a; color: var(--suave); }
+  .mi-card { background: var(--gris); padding: 10px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #222; }
+  .mi-card img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; border: 2px solid var(--rojo); }
+  .mi-card .etq { font-size: 0.6rem; color: var(--suave); text-transform: uppercase; letter-spacing: 1px; }
+  .mi-card .nom { font-size: 0.95rem; font-weight: 700; text-transform: uppercase; }
+  .grid-juego { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 8px; flex: 1; }
+  .carta-j { background: var(--gris); border-radius: 6px; overflow: hidden; cursor: pointer; position: relative; border: 1px solid #222; }
+  .carta-j img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; transition: filter 0.2s; }
+  .carta-j.fuera img { filter: grayscale(1) brightness(0.15); }
+  .carta-j.fuera::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.65); }
+  .pie-juego { padding: 10px 16px; background: var(--gris); border-top: 2px solid #333; display: flex; gap: 10px; position: sticky; bottom: 0; }
+  .pie-juego .btn { flex: 1; padding: 13px; font-size: 0.9rem; }
 
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100; align-items:center; justify-content:center; padding:24px; }
-  .modal-overlay.activo { display:flex; }
-  .modal { background:var(--gris); border-radius:16px; padding:24px 20px; max-width:380px; width:100%; border:2px solid var(--rojo); }
-  .modal h2 { font-size:1.3rem; text-align:center; margin-bottom:16px; text-transform:uppercase; }
-  .grid-adivinanza { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:16px; max-height:55vh; overflow-y:auto; }
-  .carta-adivina { background:#222; border-radius:6px; overflow:hidden; border:2px solid transparent; cursor:pointer; }
-  .carta-adivina:active { transform:scale(0.95); }
-  .carta-adivina.elegida { border-color:var(--oro); }
-  .carta-adivina img { width:100%; aspect-ratio:1; object-fit:cover; }
-  .modal-btns { display:flex; gap:10px; }
-  .modal-btns .btn { flex:1; padding:14px; }
+  /* MODAL */
+  .modal-fondo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .modal-fondo.abierto { display: flex; }
+  .modal { background: var(--gris); border-radius: 16px; padding: 24px 20px; max-width: 380px; width: 100%; border: 2px solid var(--rojo); }
+  .modal h2 { font-size: 1.2rem; text-align: center; margin-bottom: 16px; text-transform: uppercase; }
+  .grid-adivina { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 16px; max-height: 55vh; overflow-y: auto; }
+  .c-adivina { background: #222; border-radius: 6px; overflow: hidden; border: 2px solid transparent; cursor: pointer; }
+  .c-adivina.elegida { border-color: var(--oro); }
+  .c-adivina img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .modal-btns { display: flex; gap: 10px; }
+  .modal-btns .btn { flex: 1; padding: 14px; }
 
-  #pantalla-resultado { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:24px; gap:16px; text-align:center; }
-  .resultado-emoji { font-size:5rem; }
-  .resultado-titulo { font-size:2.5rem; font-weight:900; text-transform:uppercase; }
-  .resultado-sub { color:var(--texto-suave); font-size:1rem; max-width:300px; }
-  .resultado-fotos { display:flex; gap:20px; align-items:center; justify-content:center; flex-wrap:wrap; }
-  .resultado-foto-box { display:flex; flex-direction:column; align-items:center; gap:8px; }
-  .resultado-foto { width:110px; height:110px; border-radius:50%; object-fit:cover; }
-  .resultado-foto.yo { border:4px solid var(--rojo); }
-  .resultado-foto.ellos { border:4px solid var(--oro); }
-  .resultado-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--texto-suave); }
-  .resultado-nombre { font-size:0.85rem; font-weight:700; text-transform:uppercase; }
+  /* RESULTADO */
+  #pantalla-resultado { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; gap: 18px; text-align: center; }
+  .res-emoji { font-size: 5rem; }
+  .res-titulo { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
+  .res-fotos { display: flex; gap: 24px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .res-foto-caja { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .res-foto { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
+  .res-foto.mia { border: 4px solid var(--rojo); }
+  .res-foto.suya { border: 4px solid var(--oro); }
+  .res-etq { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--suave); }
+  .res-nom { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+  .res-sub { color: var(--suave); font-size: 1rem; max-width: 300px; }
 
-  .hidden { display:none !important; }
-  .msg-error { color:var(--rojo); font-size:0.85rem; text-align:center; }
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
 
 <!-- INICIO -->
 <div id="pantalla-inicio">
-  <div class="logo-ogilvy">Ogilvy<span>.</span></div>
-  <div class="titulo-juego">Adivina Qui\u00e9n</div>
-  <div class="separador"></div>
-  <div id="vista-menu" style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:340px">
-    <button class="btn btn-primario" onclick="crearSala()">Crear sala nueva</button>
-    <button class="btn btn-secundario" onclick="mostrarUnirse()">Unirse a una sala</button>
+  <div class="logo">Ogilvy<span>.</span></div>
+  <div class="subtitulo">Adivina Quien</div>
+  <div class="linea"></div>
+
+  <div id="v-menu" style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:340px">
+    <button class="btn btn-rojo" onclick="crearSala()">Crear sala nueva</button>
+    <button class="btn btn-gris" onclick="verUnirse()">Unirse a una sala</button>
   </div>
-  <div id="vista-crear" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%">
-    <div class="codigo-sala">
-      <div class="label">C\u00f3digo de sala</div>
-      <div class="codigo" id="codigo-display">----</div>
+
+  <div id="v-crear" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%">
+    <div class="caja-codigo">
+      <div class="etiqueta">Codigo de sala</div>
+      <div class="codigo" id="cod-display">----</div>
     </div>
-    <div class="esperando"><div class="dot-pulse"></div><span>Esperando al segundo jugador...</span></div>
-    <button class="btn btn-secundario" onclick="cancelarSala()">Cancelar</button>
+    <div class="esperando"><div class="punto"></div><span>Esperando al segundo jugador...</span></div>
+    <button class="btn btn-gris" onclick="cancelarSala()">Cancelar</button>
   </div>
-  <div id="vista-unirse" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%">
-    <input class="input-sala" id="input-codigo" placeholder="C\u00f3digo de 4 letras" maxlength="4" oninput="this.value=this.value.toUpperCase()">
-    <div id="msg-error" class="msg-error hidden">Sala no encontrada. Verifica el c\u00f3digo.</div>
-    <button class="btn btn-primario" onclick="unirseASala()">Unirse</button>
-    <button class="btn btn-secundario" onclick="volverMenu()">Volver</button>
+
+  <div id="v-unirse" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%">
+    <input class="input-codigo" id="inp-codigo" placeholder="XXXX" maxlength="4" oninput="this.value=this.value.toUpperCase()">
+    <div id="msg-error" class="error hidden">Sala no encontrada. Verifica el codigo.</div>
+    <button class="btn btn-rojo" onclick="unirse()">Unirse</button>
+    <button class="btn btn-gris" onclick="volverMenu()">Volver</button>
   </div>
 </div>
 
 <!-- SELECCION -->
 <div id="pantalla-seleccion">
-  <div class="header-juego">
-    <div class="header-titulo">Elige tu personaje</div>
-    <div class="header-info" id="info-sala-sel"></div>
+  <div class="cabecera">
+    <div class="cabecera-titulo">Elige tu personaje</div>
+    <div class="cabecera-info" id="info-sala"></div>
   </div>
-  <div class="instruccion">\u00a1Elige en secreto \u2014 no se lo muestres al otro!</div>
-  <div class="grid-seleccion" id="grid-seleccion"></div>
-  <div class="footer-seleccion">
-    <button class="btn btn-primario" id="btn-confirmar-personaje" onclick="confirmarPersonaje()" disabled>Confirmar personaje</button>
-    <div class="esperando-confirm hidden" id="texto-esperando-confirm">Esperando al otro jugador...</div>
+  <div class="aviso">Elige en secreto. No se lo muestres al otro jugador.</div>
+  <div class="grid-sel" id="grid-sel"></div>
+  <div class="pie-sel">
+    <button class="btn btn-rojo" id="btn-confirmar" onclick="confirmarPersonaje()" disabled>Confirmar personaje</button>
+    <div class="texto-espera hidden" id="txt-espera">Esperando al otro jugador...</div>
   </div>
 </div>
 
 <!-- JUEGO -->
 <div id="pantalla-juego">
-  <div class="header-juego">
-    <div class="header-titulo">Adivina Qui\u00e9n</div>
-    <div class="header-info" id="contador-restantes"></div>
+  <div class="cabecera">
+    <div class="cabecera-titulo">Adivina Quien</div>
+    <div class="cabecera-info" id="contador"></div>
   </div>
-  <div class="banner-turno" id="banner-turno"></div>
-  <div class="mi-personaje">
-    <img id="mi-foto-juego" src="" alt="">
-    <div class="info">
-      <div class="label-mi">Tu personaje secreto</div>
-      <div class="nombre-mi" id="mi-nombre-juego"></div>
+  <div class="turno-banner" id="banner-turno"></div>
+  <div class="mi-card">
+    <img id="mi-foto" src="" alt="">
+    <div>
+      <div class="etq">Tu personaje secreto</div>
+      <div class="nom" id="mi-nombre"></div>
     </div>
   </div>
   <div class="grid-juego" id="grid-juego"></div>
-  <div class="footer-juego">
-    <button class="btn btn-pasar" id="btn-pasar" onclick="pasarTurno()">\u2192 Pasar turno</button>
-    <button class="btn btn-adivinar" onclick="abrirModal()">\u00bfQui\u00e9n es?</button>
+  <div class="pie-juego">
+    <button class="btn btn-gris" id="btn-pasar" onclick="pasarTurno()">Pasar turno</button>
+    <button class="btn btn-oro" onclick="abrirModal()">Adivinar</button>
   </div>
 </div>
 
 <!-- RESULTADO -->
 <div id="pantalla-resultado">
-  <div class="resultado-emoji" id="emoji-resultado"></div>
-  <div class="resultado-titulo" id="titulo-resultado"></div>
-  <div class="resultado-fotos">
-    <div class="resultado-foto-box">
-      <img class="resultado-foto yo" id="foto-yo" src="" alt="">
-      <div class="resultado-label">T\u00fa eras</div>
-      <div class="resultado-nombre" id="nombre-yo"></div>
+  <div class="res-emoji" id="r-emoji"></div>
+  <div class="res-titulo" id="r-titulo"></div>
+  <div class="res-fotos">
+    <div class="res-foto-caja">
+      <img class="res-foto mia" id="r-foto-yo" src="" alt="">
+      <div class="res-etq">Tu eras</div>
+      <div class="res-nom" id="r-nom-yo"></div>
     </div>
-    <div style="font-size:2rem; color:#555;">vs</div>
-    <div class="resultado-foto-box">
-      <img class="resultado-foto ellos" id="foto-ellos" src="" alt="">
-      <div class="resultado-label">El otro era</div>
-      <div class="resultado-nombre" id="nombre-ellos"></div>
+    <div style="font-size:2rem;color:#444">vs</div>
+    <div class="res-foto-caja">
+      <img class="res-foto suya" id="r-foto-ellos" src="" alt="">
+      <div class="res-etq">El otro era</div>
+      <div class="res-nom" id="r-nom-ellos"></div>
     </div>
   </div>
-  <div class="resultado-sub" id="sub-resultado"></div>
-  <button class="btn btn-primario" style="max-width:280px" onclick="reiniciarJuego()">Jugar de nuevo</button>
+  <div class="res-sub" id="r-sub"></div>
+  <button class="btn btn-rojo" style="max-width:280px" onclick="reiniciar()">Jugar de nuevo</button>
 </div>
 
-<!-- MODAL ADIVINANZA -->
-<div class="modal-overlay" id="modal-adivina">
+<!-- MODAL -->
+<div class="modal-fondo" id="modal">
   <div class="modal">
-    <h2>\u00bfQui\u00e9n crees que es?</h2>
-    <div class="grid-adivinanza" id="grid-adivinanza"></div>
+    <h2>Quien crees que es?</h2>
+    <div class="grid-adivina" id="grid-adivina"></div>
     <div class="modal-btns">
-      <button class="btn btn-secundario" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn btn-primario" onclick="confirmarAdivinanza()">\u00a1Es \u00e9ste!</button>
+      <button class="btn btn-gris" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn btn-rojo" onclick="confirmarAdivinanza()">Es este!</button>
     </div>
   </div>
 </div>
 
 <script>
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyAUA7MlHTEhbKyn_b7MAfPNhc1HLu5CJv0",
   authDomain: "adivina-quien-ogilvy.firebaseapp.com",
   databaseURL: "https://adivina-quien-ogilvy-default-rtdb.firebaseio.com",
@@ -202,11 +201,10 @@ const firebaseConfig = {
   storageBucket: "adivina-quien-ogilvy.firebasestorage.app",
   messagingSenderId: "602981465045",
   appId: "1:602981465045:web:4b098ad40dc5e2c6dbdb5c"
-};
-firebase.initializeApp(firebaseConfig);
+});
 const db = firebase.database();
 
-const PERSONAJES = [
+const LISTA = [
   "Abigail_Zaldana","Alex_Gonzalez","Amilcar_Serrano","Antonieta_Soriano","Antonio_Pastore",
   "Ariel_Coreas","Bruno_Bianchi","Carlos_Alfaro","Carlos_Romero","Carolina_Diaz",
   "Cesar_Chavez","Chiky_Vasquez","Claudia_Flores","Coralia_Guillen","Darwing_Langlois",
@@ -214,235 +212,240 @@ const PERSONAJES = [
   "Enzo_Bianchi","Erika_Aleman","Ezequiel_Romero","Fabiola_Trabanino","Francia_Salazar",
   "Gabriela_Garcia","Gabriela_Martinez","Giovanni_Martinez","Guillermina_Eguizabal","Ivania_Samayoa",
   "Jaime_Carranza","Jamin_Ventura","Javier_Sandoval","Jesus_Nolasco","Jonathan_Castillo",
-  "Jorge_Golcher","Josue_Hernandez","Juan_Leonor","Julio_Lopez","Karen_Gochez",
-  "Karen_Rivas","Karla_Herrera","Leticia_Flores","Lorenzo_Hernandez","Manuel_Segovia",
-  "Marcella_Rodriguez","Marco_Hernandez","Mario_Benavides","Mario_Granados","Mario_Lopez",
-  "Mario_Rivera","Mariu_Engelhard","Maximo_Alvarado","Melany_Mena","Melida_Ayala",
-  "Michael_Mendez","Miguel_Rivera","Miriam_Sanchez","Muriel_Tobar","Noe_Madrid",
-  "Olga_Zelaya","Oscar_Perez","Pamela_Abarca","Paolo_Bianchi","Rafael_Pacas",
-  "Raul_Villatoro","Rebeca_Granados","Rodrigo_Cestoni","Rodrigo_Ramos","Rosy_Guandique",
-  "Roxana_Contreras","Roxana_Golcher","Sebastian_Valencia","Tania_Vanegas","Teresa_Moran",
-  "Walter_Matute","Yanira_Acosta"
+  "Josue_Hernandez","Juan_Leonor","Julio_Lopez","Karen_Gochez","Karen_Rivas",
+  "Karla_Herrera","Leticia_Flores","Lorenzo_Hernandez","Manuel_Segovia","Marcella_Rodriguez",
+  "Marco_Hernandez","Mario_Benavides","Mario_Granados","Mario_Lopez","Mario_Rivera",
+  "Mariu_Engelhard","Maximo_Alvarado","Melany_Mena","Melida_Ayala","Michael_Mendez",
+  "Miguel_Rivera","Miriam_Sanchez","Muriel_Tobar","Noe_Madrid","Olga_Zelaya",
+  "Oscar_Perez","Pamela_Abarca","Paolo_Bianchi","Rafael_Pacas","Raul_Villatoro",
+  "Rebeca_Granados","Rodrigo_Cestoni","Rodrigo_Ramos","Rosy_Guandique","Roxana_Contreras",
+  "Roxana_Golcher","Sebastian_Valencia","Tania_Vanegas","Teresa_Moran","Walter_Matute",
+  "Yanira_Acosta"
 ];
 
-function imgSrc(n) { return n + '.jpg'; }
+function foto(n) { return n + '.jpg'; }
+function nombre(n) { return n.replace(/_/g, ' '); }
 
-let salaId=null, miRol=null, miPersonaje=null;
-let personajeTemp=null, eliminadas=[], adivinanzaElegida=null, salaRef=null;
-let yaEnJuego=false, yaEnResultado=false;
+let salaId=null, miRol=null, miPersonaje=null, personajeTemp=null;
+let adivinado=null, salaRef=null, enJuego=false, enResultado=false;
 
 function generarCodigo() {
-  return Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*23)]).join('');
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  return Array.from({length:4}, () => abc[Math.floor(Math.random()*abc.length)]).join('');
 }
 
 function crearSala() {
-  const codigo = generarCodigo();
-  salaId = codigo; miRol = 'jugador1';
-  salaRef = db.ref('salas/' + codigo);
-  salaRef.set({ estado:'esperando', turno:'jugador1', jugador1:{personaje:null,listo:false}, jugador2:{personaje:null,listo:false}, ganador:null }).then(()=>{
-    document.getElementById('vista-menu').classList.add('hidden');
-    document.getElementById('vista-crear').classList.remove('hidden');
-    document.getElementById('codigo-display').textContent = codigo;
-    salaRef.on('value', manejarCambioSala);
+  const cod = generarCodigo();
+  salaId = cod; miRol = 'j1';
+  salaRef = db.ref('salas/' + cod);
+  salaRef.set({
+    estado: 'esperando', turno: 'j1',
+    j1: {personaje: null, listo: false},
+    j2: {personaje: null, listo: false},
+    ganador: null
+  }).then(() => {
+    document.getElementById('v-menu').classList.add('hidden');
+    document.getElementById('v-crear').classList.remove('hidden');
+    document.getElementById('cod-display').textContent = cod;
+    salaRef.on('value', onChange);
   });
 }
 
 function cancelarSala() {
-  if(salaRef) { salaRef.off(); salaRef.remove(); }
+  if (salaRef) { salaRef.off(); salaRef.remove(); }
   volverMenu();
 }
 
-function mostrarUnirse() {
-  document.getElementById('vista-menu').classList.add('hidden');
-  document.getElementById('vista-unirse').classList.remove('hidden');
+function verUnirse() {
+  document.getElementById('v-menu').classList.add('hidden');
+  document.getElementById('v-unirse').classList.remove('hidden');
 }
 
 function volverMenu() {
-  document.getElementById('vista-crear').classList.add('hidden');
-  document.getElementById('vista-unirse').classList.add('hidden');
+  document.getElementById('v-crear').classList.add('hidden');
+  document.getElementById('v-unirse').classList.add('hidden');
   document.getElementById('msg-error').classList.add('hidden');
-  document.getElementById('vista-menu').classList.remove('hidden');
-  document.getElementById('input-codigo').value = '';
+  document.getElementById('v-menu').classList.remove('hidden');
+  document.getElementById('inp-codigo').value = '';
 }
 
-function unirseASala() {
-  const codigo = document.getElementById('input-codigo').value.trim().toUpperCase();
-  if(codigo.length !== 4) return;
-  db.ref('salas/'+codigo).once('value').then(snap=>{
+function unirse() {
+  const cod = document.getElementById('inp-codigo').value.trim().toUpperCase();
+  if (cod.length !== 4) return;
+  db.ref('salas/' + cod).once('value').then(snap => {
     const d = snap.val();
-    if(!d || d.estado !== 'esperando') {
-      document.getElementById('msg-error').classList.remove('hidden'); return;
+    if (!d || d.estado !== 'esperando') {
+      document.getElementById('msg-error').classList.remove('hidden');
+      return;
     }
-    salaId=codigo; miRol='jugador2'; salaRef=db.ref('salas/'+codigo);
-    salaRef.update({estado:'seleccion'});
-    salaRef.on('value', manejarCambioSala);
+    salaId = cod; miRol = 'j2';
+    salaRef = db.ref('salas/' + cod);
+    salaRef.update({estado: 'seleccion'});
+    salaRef.on('value', onChange);
   });
 }
 
-function manejarCambioSala(snap) {
+function onChange(snap) {
   const d = snap.val();
-  if(!d) return;
-  if(d.estado==='seleccion' && document.getElementById('pantalla-seleccion').style.display!=='flex') irASeleccion();
-  if(d.estado==='jugando' && !yaEnJuego) irAJuego(d);
-  if(d.estado==='jugando' && yaEnJuego) actualizarBannerTurno(d.turno);
-  if(d.ganador && !yaEnResultado) mostrarResultado(d);
+  if (!d) return;
+  if (d.estado === 'seleccion' && document.getElementById('pantalla-seleccion').style.display !== 'flex') {
+    irSeleccion();
+  }
+  if (d.estado === 'jugando' && !enJuego) irJuego(d);
+  if (d.estado === 'jugando' && enJuego) ponerBanner(d.turno);
+  if (d.ganador && !enResultado) irResultado(d);
 }
 
-function irASeleccion() {
-  document.getElementById('pantalla-inicio').style.display='none';
-  document.getElementById('pantalla-seleccion').style.display='flex';
-  document.getElementById('info-sala-sel').textContent='Sala: '+salaId;
-  const grid=document.getElementById('grid-seleccion');
-  grid.innerHTML='';
-  PERSONAJES.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='carta-seleccion';
-    div.innerHTML='<img src="'+imgSrc(p)+'" loading="lazy">';
-    div.onclick=()=>{
-      document.querySelectorAll('.carta-seleccion').forEach(c=>c.classList.remove('seleccionada'));
-      div.classList.add('seleccionada');
-      personajeTemp=p;
-      document.getElementById('btn-confirmar-personaje').disabled=false;
+function irSeleccion() {
+  document.getElementById('pantalla-inicio').style.display = 'none';
+  document.getElementById('pantalla-seleccion').style.display = 'flex';
+  document.getElementById('info-sala').textContent = 'Sala: ' + salaId;
+  const g = document.getElementById('grid-sel');
+  g.innerHTML = '';
+  LISTA.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'carta-sel';
+    d.innerHTML = '<img src="' + foto(p) + '" loading="lazy">';
+    d.onclick = () => {
+      document.querySelectorAll('.carta-sel').forEach(c => c.classList.remove('activa'));
+      d.classList.add('activa');
+      personajeTemp = p;
+      document.getElementById('btn-confirmar').disabled = false;
     };
-    grid.appendChild(div);
+    g.appendChild(d);
   });
 }
 
 function confirmarPersonaje() {
-  if(!personajeTemp) return;
-  miPersonaje=personajeTemp;
-  const btn=document.getElementById('btn-confirmar-personaje');
-  btn.disabled=true;
-  btn.classList.add('hidden');
-  document.getElementById('texto-esperando-confirm').classList.remove('hidden');
-
-  salaRef.update({ [miRol+'/personaje']: miPersonaje, [miRol+'/listo']: true }).then(()=>{
-    salaRef.once('value').then(snap=>{
-      const d=snap.val();
-      if(d.jugador1.listo && d.jugador2.listo) salaRef.update({estado:'jugando'});
+  if (!personajeTemp) return;
+  miPersonaje = personajeTemp;
+  document.getElementById('btn-confirmar').classList.add('hidden');
+  document.getElementById('txt-espera').classList.remove('hidden');
+  salaRef.update({
+    [miRol + '/personaje']: miPersonaje,
+    [miRol + '/listo']: true
+  }).then(() => {
+    salaRef.once('value').then(snap => {
+      const d = snap.val();
+      if (d.j1.listo && d.j2.listo) salaRef.update({estado: 'jugando'});
     });
   });
 }
 
-function irAJuego(data) {
-  if(yaEnJuego) return;
-  yaEnJuego=true;
-  document.getElementById('pantalla-seleccion').style.display='none';
-  document.getElementById('pantalla-juego').style.display='flex';
-  miPersonaje=data[miRol].personaje;
-  document.getElementById('mi-foto-juego').src=imgSrc(miPersonaje);
-  document.getElementById('mi-nombre-juego').textContent=miPersonaje.replace(/_/g,' ');
-  eliminadas=[];
-  const grid=document.getElementById('grid-juego');
-  grid.innerHTML='';
-  PERSONAJES.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='carta-juego';
-    div.innerHTML='<img src="'+imgSrc(p)+'" loading="lazy">';
-    div.onclick=()=>{ div.classList.toggle('eliminada'); actualizarContador(); };
-    grid.appendChild(div);
+function irJuego(data) {
+  if (enJuego) return;
+  enJuego = true;
+  document.getElementById('pantalla-seleccion').style.display = 'none';
+  document.getElementById('pantalla-juego').style.display = 'flex';
+  miPersonaje = data[miRol].personaje;
+  document.getElementById('mi-foto').src = foto(miPersonaje);
+  document.getElementById('mi-nombre').textContent = nombre(miPersonaje);
+  const g = document.getElementById('grid-juego');
+  g.innerHTML = '';
+  LISTA.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'carta-j';
+    d.innerHTML = '<img src="' + foto(p) + '" loading="lazy">';
+    d.onclick = () => { d.classList.toggle('fuera'); contarRestantes(); };
+    g.appendChild(d);
   });
-  actualizarBannerTurno(data.turno);
-  actualizarContador();
+  ponerBanner(data.turno);
+  contarRestantes();
 }
 
-function actualizarContador() {
-  const elim=document.querySelectorAll('.carta-juego.eliminada').length;
-  document.getElementById('contador-restantes').textContent=(PERSONAJES.length-elim)+' restantes';
+function contarRestantes() {
+  const fuera = document.querySelectorAll('.carta-j.fuera').length;
+  document.getElementById('contador').textContent = (LISTA.length - fuera) + ' restantes';
 }
 
-function actualizarBannerTurno(turno) {
-  const banner=document.getElementById('banner-turno');
-  const btn=document.getElementById('btn-pasar');
-  if(turno===miRol) {
-    banner.textContent='\u2b50 Tu turno \u2014 haz una pregunta en voz alta';
-    banner.className='banner-turno mi-turno';
-    btn.style.display='block';
+function ponerBanner(turno) {
+  const b = document.getElementById('banner-turno');
+  const bp = document.getElementById('btn-pasar');
+  if (turno === miRol) {
+    b.textContent = 'Tu turno - haz una pregunta en voz alta';
+    b.className = 'turno-banner yo';
+    bp.style.display = 'block';
   } else {
-    banner.textContent='\u23f3 Espera \u2014 turno del otro jugador';
-    banner.className='banner-turno su-turno';
-    btn.style.display='none';
+    b.textContent = 'Espera - turno del otro jugador';
+    b.className = 'turno-banner otro';
+    bp.style.display = 'none';
   }
 }
 
 function pasarTurno() {
-  salaRef.update({turno: miRol==='jugador1'?'jugador2':'jugador1'});
+  salaRef.update({turno: miRol === 'j1' ? 'j2' : 'j1'});
 }
 
 function abrirModal() {
-  adivinanzaElegida=null;
-  const grid=document.getElementById('grid-adivinanza');
-  grid.innerHTML='';
-  PERSONAJES.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='carta-adivina';
-    div.innerHTML='<img src="'+imgSrc(p)+'">';
-    div.onclick=()=>{
-      document.querySelectorAll('.carta-adivina').forEach(c=>c.classList.remove('elegida'));
-      div.classList.add('elegida');
-      adivinanzaElegida=p;
+  adivinado = null;
+  const g = document.getElementById('grid-adivina');
+  g.innerHTML = '';
+  LISTA.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'c-adivina';
+    d.innerHTML = '<img src="' + foto(p) + '">';
+    d.onclick = () => {
+      document.querySelectorAll('.c-adivina').forEach(c => c.classList.remove('elegida'));
+      d.classList.add('elegida');
+      adivinado = p;
     };
-    grid.appendChild(div);
+    g.appendChild(d);
   });
-  document.getElementById('modal-adivina').classList.add('activo');
+  document.getElementById('modal').classList.add('abierto');
 }
 
 function cerrarModal() {
-  document.getElementById('modal-adivina').classList.remove('activo');
+  document.getElementById('modal').classList.remove('abierto');
 }
 
 function confirmarAdivinanza() {
-  if(!adivinanzaElegida) return;
+  if (!adivinado) return;
   cerrarModal();
-  salaRef.once('value').then(snap=>{
-    const d=snap.val();
-    const oponente=miRol==='jugador1'?'jugador2':'jugador1';
-    const personajeOponente=d[oponente].personaje;
-    const acerto=adivinanzaElegida===personajeOponente;
+  salaRef.once('value').then(snap => {
+    const d = snap.val();
+    const otro = miRol === 'j1' ? 'j2' : 'j1';
+    const correcto = d[otro].personaje;
+    const acerto = adivinado === correcto;
     salaRef.update({
-      ganador: acerto?miRol:oponente,
-      personajeAdivinado: adivinanzaElegida,
+      ganador: acerto ? miRol : otro,
       quienAdivino: miRol
     });
   });
 }
 
-function mostrarResultado(data) {
-  if(yaEnResultado) return;
-  yaEnResultado=true;
-  document.getElementById('pantalla-juego').style.display='none';
-  document.getElementById('pantalla-resultado').style.display='flex';
-
-  const oponente=miRol==='jugador1'?'jugador2':'jugador1';
-  const gane=data.ganador===miRol;
-  const miPersonajeEnJuego=data[miRol].personaje;
-  const personajeOponente=data[oponente].personaje;
-
-  document.getElementById('emoji-resultado').textContent=gane?'\ud83c\udfc6':'\ud83d\ude22';
-  document.getElementById('titulo-resultado').textContent=gane?'\u00a1Ganaste!':'Perdiste';
-  document.getElementById('sub-resultado').textContent=
-    gane ? '\u00a1Adivinaste qui\u00e9n era el otro jugador!' : 'El otro jugador te adivino primero.';
-
-  document.getElementById('foto-yo').src=imgSrc(miPersonajeEnJuego);
-  document.getElementById('nombre-yo').textContent=miPersonajeEnJuego.replace(/_/g,' ');
-  document.getElementById('foto-ellos').src=imgSrc(personajeOponente);
-  document.getElementById('nombre-ellos').textContent=personajeOponente.replace(/_/g,' ');
+function irResultado(data) {
+  if (enResultado) return;
+  enResultado = true;
+  document.getElementById('pantalla-juego').style.display = 'none';
+  document.getElementById('pantalla-resultado').style.display = 'flex';
+  const otro = miRol === 'j1' ? 'j2' : 'j1';
+  const gane = data.ganador === miRol;
+  const miP = data[miRol].personaje;
+  const suP = data[otro].personaje;
+  document.getElementById('r-emoji').textContent = gane ? '\uD83C\uDFC6' : '\uD83D\uDE22';
+  document.getElementById('r-titulo').textContent = gane ? 'Ganaste!' : 'Perdiste';
+  document.getElementById('r-sub').textContent = gane
+    ? 'Adivinaste quien era el otro jugador!'
+    : 'El otro jugador te adivino primero.';
+  document.getElementById('r-foto-yo').src = foto(miP);
+  document.getElementById('r-nom-yo').textContent = nombre(miP);
+  document.getElementById('r-foto-ellos').src = foto(suP);
+  document.getElementById('r-nom-ellos').textContent = nombre(suP);
 }
 
-function reiniciarJuego() {
-  if(salaRef){ salaRef.off(); salaRef.remove(); }
+function reiniciar() {
+  if (salaRef) { salaRef.off(); salaRef.remove(); }
   salaId=null; miRol=null; miPersonaje=null; personajeTemp=null;
-  eliminadas=[]; adivinanzaElegida=null; salaRef=null;
-  yaEnJuego=false; yaEnResultado=false;
-  document.getElementById('pantalla-resultado').style.display='none';
-  document.getElementById('pantalla-inicio').style.display='flex';
-  document.getElementById('btn-confirmar-personaje').classList.remove('hidden');
-  document.getElementById('btn-confirmar-personaje').disabled=true;
-  document.getElementById('texto-esperando-confirm').classList.add('hidden');
-  document.getElementById('vista-crear').classList.add('hidden');
-  document.getElementById('vista-unirse').classList.add('hidden');
-  document.getElementById('vista-menu').classList.remove('hidden');
-  document.getElementById('input-codigo').value='';
+  adivinado=null; salaRef=null; enJuego=false; enResultado=false;
+  document.getElementById('pantalla-resultado').style.display = 'none';
+  document.getElementById('pantalla-inicio').style.display = 'flex';
+  document.getElementById('btn-confirmar').classList.remove('hidden');
+  document.getElementById('btn-confirmar').disabled = true;
+  document.getElementById('txt-espera').classList.add('hidden');
+  document.getElementById('v-crear').classList.add('hidden');
+  document.getElementById('v-unirse').classList.add('hidden');
+  document.getElementById('v-menu').classList.remove('hidden');
+  document.getElementById('inp-codigo').value = '';
 }
 </script>
 </body>
