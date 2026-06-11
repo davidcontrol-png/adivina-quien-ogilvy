@@ -136,7 +136,6 @@
     <img id="mi-foto" src="" alt="">
     <div>
       <div class="etq">Tu personaje secreto</div>
-      <div class="nom" id="mi-nombre"></div>
     </div>
   </div>
   <div class="grid-juego" id="grid-juego"></div>
@@ -325,7 +324,7 @@ function irJuego(data) {
   document.getElementById('pantalla-juego').style.display = 'flex';
   miPersonaje = data[miRol].personaje;
   document.getElementById('mi-foto').src = foto(miPersonaje);
-  document.getElementById('mi-nombre').textContent = nombre(miPersonaje);
+
   const g = document.getElementById('grid-juego');
   g.innerHTML = '';
   LISTA.forEach(p => {
