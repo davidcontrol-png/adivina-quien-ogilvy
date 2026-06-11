@@ -8,19 +8,15 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --rojo: #e8112d; --negro: #0a0a0a; --gris: #1a1a1a;
-    --blanco: #ffffff; --oro: #f5c518; --suave: #aaaaaa;
-  }
+  :root { --rojo: #e8112d; --negro: #0a0a0a; --gris: #1a1a1a; --blanco: #ffffff; --oro: #f5c518; --suave: #aaaaaa; }
   body { background: var(--negro); color: var(--blanco); font-family: Arial, sans-serif; min-height: 100vh; }
 
-  /* INICIO */
   #pantalla-inicio { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; gap: 20px; }
   .logo { font-size: 2.8rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
   .logo span { color: var(--rojo); }
   .subtitulo { font-size: 1.4rem; color: var(--suave); text-transform: uppercase; letter-spacing: 3px; text-align: center; }
   .linea { width: 60px; height: 3px; background: var(--rojo); border-radius: 2px; }
-  .btn { width: 100%; max-width: 340px; padding: 16px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+  .btn { width: 100%; max-width: 340px; padding: 16px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
   .btn-rojo { background: var(--rojo); color: white; }
   .btn-rojo:disabled { background: #555; cursor: not-allowed; }
   .btn-gris { background: transparent; color: white; border: 2px solid #444; }
@@ -35,21 +31,20 @@
   @keyframes parpadeo { 0%,100%{opacity:1} 50%{opacity:0.3} }
   .error { color: var(--rojo); font-size: 0.85rem; text-align: center; }
 
-  /* SELECCION */
   #pantalla-seleccion { display: none; flex-direction: column; min-height: 100vh; }
   .cabecera { background: var(--gris); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--rojo); position: sticky; top: 0; z-index: 10; }
   .cabecera-titulo { font-size: 1rem; font-weight: 700; text-transform: uppercase; }
   .cabecera-info { font-size: 0.8rem; color: var(--suave); }
-  .aviso { background: var(--rojo); padding: 12px 16px; font-size: 0.95rem; font-weight: 600; text-align: center; }
+  .aviso { background: var(--rojo); padding: 12px 16px; font-size: 0.9rem; font-weight: 600; text-align: center; }
   .grid-sel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px; flex: 1; }
-  .carta-sel { background: var(--gris); border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; position: relative; }
+  .carta-sel { background: var(--gris); border-radius: 8px; overflow: hidden; border: 3px solid transparent; cursor: pointer; position: relative; }
   .carta-sel img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
   .carta-sel.activa { border-color: var(--rojo); }
-  .carta-sel.activa::after { content: ''; position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; background: var(--rojo) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E") center/14px no-repeat; border-radius: 50%; }
+  .marca-check { display: none; position: absolute; top: 4px; right: 4px; background: var(--rojo); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; font-weight: 900; align-items: center; justify-content: center; }
+  .carta-sel.activa .marca-check { display: flex; }
   .pie-sel { padding: 12px 16px; background: var(--gris); border-top: 2px solid #333; position: sticky; bottom: 0; }
   .texto-espera { text-align: center; color: var(--suave); font-size: 0.9rem; padding: 10px 0; }
 
-  /* JUEGO */
   #pantalla-juego { display: none; flex-direction: column; min-height: 100vh; }
   .turno-banner { padding: 10px 16px; text-align: center; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
   .turno-banner.yo { background: var(--rojo); }
@@ -66,11 +61,11 @@
   .pie-juego { padding: 10px 16px; background: var(--gris); border-top: 2px solid #333; display: flex; gap: 10px; position: sticky; bottom: 0; }
   .pie-juego .btn { flex: 1; padding: 13px; font-size: 0.9rem; }
 
-  /* MODAL */
   .modal-fondo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
   .modal-fondo.abierto { display: flex; }
   .modal { background: var(--gris); border-radius: 16px; padding: 24px 20px; max-width: 380px; width: 100%; border: 2px solid var(--rojo); }
-  .modal h2 { font-size: 1.2rem; text-align: center; margin-bottom: 16px; text-transform: uppercase; }
+  .modal h2 { font-size: 1.2rem; text-align: center; margin-bottom: 8px; text-transform: uppercase; }
+  .modal-aviso { font-size: 0.8rem; color: var(--suave); text-align: center; margin-bottom: 14px; }
   .grid-adivina { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 16px; max-height: 55vh; overflow-y: auto; }
   .c-adivina { background: #222; border-radius: 6px; overflow: hidden; border: 2px solid transparent; cursor: pointer; }
   .c-adivina.elegida { border-color: var(--oro); }
@@ -78,7 +73,6 @@
   .modal-btns { display: flex; gap: 10px; }
   .modal-btns .btn { flex: 1; padding: 14px; }
 
-  /* RESULTADO */
   #pantalla-resultado { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; gap: 18px; text-align: center; }
   .res-emoji { font-size: 5rem; }
   .res-titulo { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
@@ -90,23 +84,19 @@
   .res-etq { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--suave); }
   .res-nom { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
   .res-sub { color: var(--suave); font-size: 1rem; max-width: 300px; }
-
   .hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<!-- INICIO -->
 <div id="pantalla-inicio">
   <div class="logo">Ogilvy<span>.</span></div>
   <div class="subtitulo">Adivina Quien</div>
   <div class="linea"></div>
-
   <div id="v-menu" style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:340px">
     <button class="btn btn-rojo" onclick="crearSala()">Crear sala nueva</button>
     <button class="btn btn-gris" onclick="verUnirse()">Unirse a una sala</button>
   </div>
-
   <div id="v-crear" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%">
     <div class="caja-codigo">
       <div class="etiqueta">Codigo de sala</div>
@@ -115,7 +105,6 @@
     <div class="esperando"><div class="punto"></div><span>Esperando al segundo jugador...</span></div>
     <button class="btn btn-gris" onclick="cancelarSala()">Cancelar</button>
   </div>
-
   <div id="v-unirse" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%">
     <input class="input-codigo" id="inp-codigo" placeholder="XXXX" maxlength="4" oninput="this.value=this.value.toUpperCase()">
     <div id="msg-error" class="error hidden">Sala no encontrada. Verifica el codigo.</div>
@@ -124,7 +113,6 @@
   </div>
 </div>
 
-<!-- SELECCION -->
 <div id="pantalla-seleccion">
   <div class="cabecera">
     <div class="cabecera-titulo">Elige tu personaje</div>
@@ -138,7 +126,6 @@
   </div>
 </div>
 
-<!-- JUEGO -->
 <div id="pantalla-juego">
   <div class="cabecera">
     <div class="cabecera-titulo">Adivina Quien</div>
@@ -159,7 +146,6 @@
   </div>
 </div>
 
-<!-- RESULTADO -->
 <div id="pantalla-resultado">
   <div class="res-emoji" id="r-emoji"></div>
   <div class="res-titulo" id="r-titulo"></div>
@@ -180,10 +166,10 @@
   <button class="btn btn-rojo" style="max-width:280px" onclick="reiniciar()">Jugar de nuevo</button>
 </div>
 
-<!-- MODAL -->
 <div class="modal-fondo" id="modal">
   <div class="modal">
     <h2>Quien crees que es?</h2>
+    <div class="modal-aviso">Si te equivocas, pierdes el juego.</div>
     <div class="grid-adivina" id="grid-adivina"></div>
     <div class="modal-btns">
       <button class="btn btn-gris" onclick="cerrarModal()">Cancelar</button>
@@ -305,7 +291,7 @@ function irSeleccion() {
   LISTA.forEach(p => {
     const d = document.createElement('div');
     d.className = 'carta-sel';
-    d.innerHTML = '<img src="' + foto(p) + '" loading="lazy">';
+    d.innerHTML = '<img src="' + foto(p) + '" loading="lazy"><div class="marca-check">OK</div>';
     d.onclick = () => {
       document.querySelectorAll('.carta-sel').forEach(c => c.classList.remove('activa'));
       d.classList.add('activa');
@@ -406,10 +392,13 @@ function confirmarAdivinanza() {
     const otro = miRol === 'j1' ? 'j2' : 'j1';
     const correcto = d[otro].personaje;
     const acerto = adivinado === correcto;
-    salaRef.update({
-      ganador: acerto ? miRol : otro,
-      quienAdivino: miRol
-    });
+    if (acerto) {
+      salaRef.update({ ganador: miRol, estado: 'terminado' });
+    } else {
+      // Se equivoco, pierde el turno
+      const siguienteTurno = miRol === 'j1' ? 'j2' : 'j1';
+      salaRef.update({ turno: siguienteTurno });
+    }
   });
 }
 
@@ -422,7 +411,7 @@ function irResultado(data) {
   const gane = data.ganador === miRol;
   const miP = data[miRol].personaje;
   const suP = data[otro].personaje;
-  document.getElementById('r-emoji').textContent = gane ? '\uD83C\uDFC6' : '\uD83D\uDE22';
+  document.getElementById('r-emoji').textContent = gane ? ':-D' : ':-(';
   document.getElementById('r-titulo').textContent = gane ? 'Ganaste!' : 'Perdiste';
   document.getElementById('r-sub').textContent = gane
     ? 'Adivinaste quien era el otro jugador!'
